@@ -33,6 +33,9 @@ const postSchema = new Schema({
     type: Boolean,
     default: false,
   },
+ 
+}, {
+  timestamps: true,
 });
 
 // Define the Creator schema

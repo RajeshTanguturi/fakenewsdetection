@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { 
-  Shield, Search, CheckCircle, AlertTriangle, 
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  Shield, Search, CheckCircle, AlertTriangle,
   TrendingUp, User, ThumbsUp, Eye, Share2,
   BadgeCheck, AlertOctagon, Clock, BarChart2
 } from 'lucide-react';
@@ -8,6 +9,18 @@ import {
 const EnhancedPlatform = () => {
   const [activeTab, setActiveTab] = useState('trending');
   const [searchQuery, setSearchQuery] = useState('');
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    // Fetch posts from the backend API
+    axios
+      .get("http://localhost:5000/api/posts")
+      .then((response) => {
+        setPosts(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching posts", error);
+      });
+  }, []);
 
   const newsItems = [
     {
@@ -75,11 +88,10 @@ const EnhancedPlatform = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-3 py-2 rounded-md ${
-                      activeTab === tab 
-                        ? 'bg-blue-50 text-blue-600' 
+                    className={`px-3 py-2 rounded-md ${activeTab === tab
+                        ? 'bg-blue-50 text-blue-600'
                         : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                      }`}
                   >
                     {tab.charAt(0).toUpperCase() + tab.slice(1)}
                   </button>
@@ -104,26 +116,81 @@ const EnhancedPlatform = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* News Feed */}
+          {/* <div className="container mx-auto px-6 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="md:col-span-2 space-y-6">
+                <h2 className="text-2xl font-bold mb-6">Trending News</h2>
+                {posts.map((post, index) => (
+                  <div key={index} className="bg-white rounded-lg shadow overflow-hidden">
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
+                          <div className="text-sm text-gray-600">
+                            <span>Post Score: {post.postScore}</span>
+                          </div>
+                        </div>
+                        <div
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${post.verified
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                            }`}
+                        >
+                          {post.verified ? (
+                            <div className="flex items-center">Verified</div>
+                          ) : (
+                            <div className="flex items-center">False</div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="rounded-lg w-full h-auto mb-4"
+                        />
+                        <p className="text-gray-800">{post.description}</p>
+                        <div className="mt-4">
+                          <video controls className="w-full h-auto">
+                            <source src={post.video} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+                      </div> */}
+
+                      {/* Display creator info */}
+                      {/* <div className="mt-6">
+                        <h4 className="text-lg font-semibold">{post.creator.username}</h4>
+                        <p className="text-gray-600">Score: {post.creator.score}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div> */}
+
           <div className="md:col-span-2 space-y-6">
             <h2 className="text-2xl font-bold mb-6">Trending News</h2>
-            {newsItems.map((news, index) => (
+            {posts.map((post, index) => (
               <div key={index} className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
+                      <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
                       <div className="flex items-center space-x-4 text-sm text-gray-600">
-                        <span>{news.source}</span>
+                        {/* <span>{post.source}</span> */}
                         <span>•</span>
-                        <span>{news.timestamp}</span>
+                        <span>{post.timesago}</span>
                       </div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      news.verificationStatus === "Verified" 
+                      post.verified 
                         ? 'bg-green-100 text-green-800' 
                         : 'bg-red-100 text-red-800'
                     }`}>
-                      {news.verificationStatus === "Verified" ? (
+                      {post.verified ? (
                         <div className="flex items-center">
                           <CheckCircle className="h-4 w-4 mr-1" />
                           Verified
@@ -136,22 +203,32 @@ const EnhancedPlatform = () => {
                       )}
                     </div>
                   </div>
-
+                  {post.video && (
+          <div className="mt-4">
+            <video controls className="w-full max-w-md max-h-64 rounded-md shadow-md">
+              <source src="197898-905833761_small.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        )}
+      
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center">
                         <User className="h-5 w-5 text-gray-400 mr-2" />
-                        <span className="font-medium">{news.creator}</span>
-                        {news.creatorScore >= 90 && (
+                        <span className="font-medium">{post.creator.username}</span>
+                        {post.creator.score >= 90 && (
                           <BadgeCheck className="h-5 w-5 text-blue-500 ml-1" />
                         )}
                       </div>
                       <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md">
-                        Score: {news.creatorScore}
+                        Score: {post.creator.score}
                       </div>
                     </div>
+
                     
-                    <div className="flex items-center space-x-4 text-gray-500">
+                    
+                    {/* <div className="flex items-center space-x-4 text-gray-500">
                       <div className="flex items-center">
                         <Eye className="h-4 w-4 mr-1" />
                         {news.engagement.views}
@@ -164,7 +241,7 @@ const EnhancedPlatform = () => {
                         <ThumbsUp className="h-4 w-4 mr-1" />
                         {news.engagement.likes}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

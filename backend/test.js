@@ -11,7 +11,7 @@ require('dotenv').config();
 
 //   // Create a new creator
 //   const newCreator = new Creator({
-//     username: '',
+//     username: 'rajeshtanguturi',
 //     email: 'john@example.com',
 //     password: 'securepassword123', // In practice, this should be hashed!
 //     score: 50,
@@ -47,7 +47,7 @@ require('dotenv').config();
 //   console.error('Error connecting to MongoDB:', err);
 // });
 
-require('dotenv').config();
+// require('dotenv').config();
 const mongoose = require('mongoose');
 const Creator = require('./models/creator'); // Assuming the model is in models/creator.js
 const fs = require('fs').promises;
@@ -56,7 +56,7 @@ async function loadDataAndInsert() {
     try {
         // Read and parse data from JSON file
         const data = await fs.readFile('creators.json', 'utf-8');
-        const creatorsData = JSON.parse(data);
+        const creatorsData = JSON.parse(data);  
 
         // Connect to MongoDB
         await mongoose.connect(process.env.MONGODBURI, {
