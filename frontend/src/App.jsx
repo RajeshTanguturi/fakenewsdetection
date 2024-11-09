@@ -3,12 +3,17 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import LandingPage from './components/LandingPage'
+import EnhancedPlatform from './components/EnhancedPlatform'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <LandingPage />
+    <>
+    <EnhancedPlatform />
+     {/* <LandingPage /> */}
+    
+    </>
   //   <div className="flex min-h-screen items-center justify-center bg-gray-100">
   //   <div className="max-w-md rounded-lg bg-white p-6 shadow-lg">
   //     <h1 className="text-2xl font-bold text-gray-800">Hello, Tailwind CSS!</h1>

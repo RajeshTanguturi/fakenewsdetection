@@ -22,12 +22,12 @@ const LandingPage = () => {
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="container mx-auto px-6 py-20">
           <h1 className="text-5xl font-bold mb-6">Verify Digital Content in Seconds</h1>
-          <p className="text-xl mb-8 max-w-2xl">
+          <p className="text-xl mb-8 max-w-auto">
             TruthLens uses advanced AI to instantly verify content authenticity, check sources, and protect you from misinformation.
           </p>
           
           {/* Search Bar */}
-          <div className="bg-white rounded-lg p-2 max-w-2xl flex shadow-lg">
+          <div className="bg-white rounded-lg p-2 max-w-auto flex shadow-lg">
             <input 
               type="text"
               placeholder="Paste an article, link, or upload content to verify..."
@@ -41,7 +41,7 @@ const LandingPage = () => {
           </div>
           
           {/* Trust Indicators */}
-          <div className="flex gap-8 mt-12">
+          <div className="flex gap-8 mt-12 items-center justify-center">
             <div className="flex items-center">
               <Users className="h-6 w-6 mr-2" />
               <span>100K+ Users Trust Us</span>
