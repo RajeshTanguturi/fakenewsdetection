@@ -63,7 +63,38 @@ app.get("/api/posts", async (req, res) => {
   }
 });
 
+app.post('/creatorpost', async (req, res) => {
+  try {
+    const { videopath, videoTitle, username, description, score, verified } = req.body;
 
+    // Find the creator (user) by username
+    let creator = await Creator.findOne({ username });
+
+    if (!creator) {
+      return res.status(404).json({ error: 'Creator not found' });
+    }
+
+    // Create a new post
+    const newPost = {
+      title: videoTitle,
+      video: videopath,  // You can save the path or URL here
+      postScore: score,
+      verified,
+    };
+
+    // Add the new post to the creator's posts array
+    creator.posts.push(newPost);
+    
+    // Save the creator with the new post
+    await creator.save();
+
+    // Send a success response
+    res.status(200).json({ success: 'Post added successfully', post: newPost });
+  } catch (error) {
+    console.error('Error saving post:', error);
+    res.status(500).json({ error: 'Failed to save post' });
+  }
+});
 
 mongoose.connect(process.env.MONGODBURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
